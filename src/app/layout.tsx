@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
-import { CreateWorkspaceModel } from "@/features/workspaces/components/create-workspace-model";
+import { Toaster } from "@/components/ui/sonner";
+import { Model } from "@/components/model";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,8 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <ConvexClientProvider>
-            <CreateWorkspaceModel/>
+            <Toaster/>
+            <Model/>
             {children}
             </ConvexClientProvider>
         </body>
