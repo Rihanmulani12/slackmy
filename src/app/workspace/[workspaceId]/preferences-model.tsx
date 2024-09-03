@@ -70,7 +70,7 @@ export const PrefrenceModel = ({
       {  id: workspaceId  , name: value },
       {
         onSuccess: () => {
-          // router.replace("/");
+           router.replace("/");
           toast.success("Workspace Removed");
         },
         onError: () => {
