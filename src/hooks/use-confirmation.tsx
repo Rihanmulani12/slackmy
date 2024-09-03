@@ -1,72 +1,57 @@
-
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-}  from "@/components/ui/dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
-export const useConfirm = (
-    title: string,
-    message: string,
+export const useConfirm = (title: string, message: string): [JSX.Element, () => Promise<boolean>] => {
+  const [promise, setPromise] = useState<{
+    resolve: (value: boolean) => void;
+  } | null>(null);
 
-): [any,any] => {
-    const [promise, setPromise] = useState<{
-        resolve: (value: boolean) => void;
-    } | null>(null);
+  const confirm = () => {
+    return new Promise<boolean>((resolve) => {
+      setPromise({ resolve });
+    });
+  };
 
-    const confirm = () =>
-        new Promise((resolve, reject) => {
-            setPromise({ resolve });
-        });
+  const handleClose = () => {
+    setPromise(null);
+  };
 
-    const handleClose = () => {
-       
-            setPromise(null);
-        }
+  const handleCancel = () => {
+    promise?.resolve(false);
+    handleClose();
+  };
 
-        const handleCancel = () => {
-            Promise?.resolve(false);
+  const handleConfirm = () => {
+    promise?.resolve(true);
+    handleClose();
+  };
 
+  const confirmDialog = (
+    <Dialog open={promise !== null} onOpenChange={handleClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{message}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button variant="outline" onClick={handleConfirm}>
+            Confirm
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 
-    };
-
-    const handleConfirm = () => {
-        Promise?.resolve(true);
-    };
-
-
-    const confirmDialog = () => {  
-         <Dialog>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
-
-                    <DialogDescription>{message}</DialogDescription>
-                    <DialogFooter className="pt-2">
-                        <Button variant="outline" onClick={handleCancel}>Cancel</Button>
-                        <Button variant="outline" onClick={handleConfirm}>Confirm</Button>
-
-                    </DialogFooter>
-
-                </DialogHeader>
-
-
-            </DialogContent>
-         </Dialog>
-    }
-
-
-    
-    
-
-    return [ confirmDialog,  confirm];
+  return [confirmDialog, confirm];
 };
-
-
