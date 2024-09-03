@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react"
 
 import { CreateWorkspaceModel } from "@/features/workspaces/components/create-workspace-model"
+import { CreateChannelModel } from "@/features/channels/components/create-channel-model"
 
 export const Model = ()=>{
 
@@ -16,6 +17,7 @@ export const Model = ()=>{
 
     return (
         <>
+        <CreateChannelModel/>
         <CreateWorkspaceModel/>
         </>
     )

@@ -1,4 +1,7 @@
 "use client";
+
+
+import { usecreateChannelModel } from "@/features/channels/store/use-create-channel-model";
 import { useGetMember } from "@/features/members/api/use-get-member";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useWorkspaceId } from "../../../hooks/use-workspace-id";
@@ -14,8 +17,12 @@ import { UserItem } from "./user-item";
 
 
 
+
 export const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
+   
+
+   const [open, setOpen] = usecreateChannelModel()
 
   const { data: member, isLoading: memberLoading } = useCurrentMember({
     workspaceId,
@@ -29,6 +36,8 @@ export const WorkspaceSidebar = () => {
   const {data : members , isLoading : membersLoading} = useGetMember({workspaceId})
 
   if (workspaceLoading || memberLoading) {
+
+    
     return (
       <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
         <Loader className="size-5 animate-spin text-white" />
@@ -44,6 +53,8 @@ export const WorkspaceSidebar = () => {
       </div>
     );
   }
+
+ 
 
   return <div className="flex flex-col bg-[#5E2C5F] h-full ">
     <WorkspaceHeader workspace={workspace} isAdmin={member.role === "admin"}/>
@@ -65,7 +76,7 @@ export const WorkspaceSidebar = () => {
       <WorkspaceSection
       label="Channels"
       hint="new channel"
-      onNew ={ () => {}}
+      onNew ={ member.role === "admin" ? () => setOpen(true) : undefined}
       
       >
 
