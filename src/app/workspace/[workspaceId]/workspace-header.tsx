@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { InviteModel } from "./invite-model";
 import { Doc } from "../../../../convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Hint } from "@/components/hint";
@@ -12,6 +13,7 @@ import {
 import { ChevronDown, ListFilter, SquarePen } from "lucide-react";
 import { PrefrenceModel } from "./preferences-model";
 
+
 interface WorkspaceHeaderProps {
   workspace: Doc<"workspaces">;
   isAdmin: boolean;
@@ -24,9 +26,17 @@ export const WorkspaceHeader = ({
 
 
   const [prefrenceOpen , setPrefrenceOpen] = useState(false)
+  const [inviteOpen , setInviteOpen] = useState(false)
   return (
 
     <>
+    <InviteModel
+      open={inviteOpen}
+      setOpen={setInviteOpen}
+      name = {workspace.name}
+      joinCode = {workspace.joinCode}
+      
+    />
 
     <PrefrenceModel open={prefrenceOpen} setOpen={setPrefrenceOpen} initialValue={workspace.name}/>
     <div className="flex items-center justify-between px-4 h-[49px]gap-0.5">
@@ -59,7 +69,7 @@ export const WorkspaceHeader = ({
 
               <DropdownMenuItem
                 className="cursor-pointer py-2"
-                onClick={() => {}}
+                onClick={() => setInviteOpen(true)}
               >
                 Invite people to code test
               </DropdownMenuItem>
