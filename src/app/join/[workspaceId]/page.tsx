@@ -31,6 +31,7 @@ const JoinPage = () => {
     },[data?.isMember])
 
     useEffect(()=>{
+        //@ts-ignore
         if(isMember){
             router.replace(`/workspace/${workspaceId}`)
         } 
