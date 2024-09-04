@@ -1,7 +1,6 @@
 "use client";
 
-
-import { usecreateChannelModel } from "@/features/channels/store/use-create-channel-model";
+import { useCreateChannelModel } from "@/features/channels/store/use-create-channel-model";
 import { useGetMember } from "@/features/members/api/use-get-member";
 import { useCurrentMember } from "@/features/members/api/use-current-member";
 import { useWorkspaceId } from "../../../hooks/use-workspace-id";
@@ -13,16 +12,14 @@ import { useGetChannels } from "@/features/channels/api/use-get-channels";
 import { WorkspaceSection } from "./workspace-section";
 import { UserItem } from "./user-item";
 
-
-
-
-
-
 export const WorkspaceSidebar = () => {
   const workspaceId = useWorkspaceId();
-   
 
-   const [open, setOpen] = usecreateChannelModel()
+  const [_open, setOpen] = useCreateChannelModel();
+
+  // const toggleModel = () => {
+  //   setOpen(prev => !prev); // Toggle the model state
+  // };
 
   const { data: member, isLoading: memberLoading } = useCurrentMember({
     workspaceId,
@@ -31,13 +28,11 @@ export const WorkspaceSidebar = () => {
     id: workspaceId,
   });
 
-  const {data: channels , isLoading : channelLoading} = useGetChannels({workspaceId})
+  const { data: channels, isLoading: channelLoading } = useGetChannels({ workspaceId });
 
-  const {data : members , isLoading : membersLoading} = useGetMember({workspaceId})
+  const { data: members, isLoading: membersLoading } = useGetMember({ workspaceId });
 
   if (workspaceLoading || memberLoading) {
-
-    
     return (
       <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
         <Loader className="size-5 animate-spin text-white" />
@@ -54,60 +49,50 @@ export const WorkspaceSidebar = () => {
     );
   }
 
- 
-
-  return <div className="flex flex-col bg-[#5E2C5F] h-full ">
-    <WorkspaceHeader workspace={workspace} isAdmin={member.role === "admin"}/>
-    <div className="flex flex-col px-2 mt-3">
-      <SidebarItem 
-      label = "Threads"
-      icon={MessageSquareText}
-      id="threads"
-     
-      />
-      <SidebarItem 
-      label = "Darfts & Sent"
-      icon={SendHorizonal}
-      id="drafts"
-     
-      />
+  return (
+    <div className="flex flex-col bg-[#5E2C5F] h-full">
+      <WorkspaceHeader workspace={workspace} isAdmin={member.role === "admin"} />
+      <div className="flex flex-col px-2 mt-3">
+        <SidebarItem
+          label="Threads"
+          icon={MessageSquareText}
+          id="threads"
+        />
+        <SidebarItem
+          label="Drafts & Sent"
+          icon={SendHorizonal}
+          id="drafts"
+        />
       </div>
 
       <WorkspaceSection
-      label="Channels"
-      hint="new channel"
-      onNew ={ member.role === "admin" ? () => setOpen(true) : undefined}
-      
+        label="Channels"
+        hint="new channel"
+        onNew={member.role === "admin" ? () => setOpen(true) : undefined}
       >
-
-      {channels?.map((item) => (
-        <SidebarItem
-        key={item._id}
-        label={item.name}
-        id={item._id}
-      
-        icon={HashIcon}
-        />
-      ))}
+        {channels?.map((item) => (
+          <SidebarItem
+            key={item._id}
+            label={item.name}
+            id={item._id}
+            icon={HashIcon}
+          />
+        ))}
       </WorkspaceSection>
+
       <WorkspaceSection
-      label="Direct Messages"
-      hint="New DM"
-      onNew ={ () => {}}
-      
+        label="Direct Messages"
+        hint="New DM"
+        onNew={() => {}}
       >
-
-      {members?.map((item) => (
-        <UserItem key={item._id} 
-        id={item._id}
-        label={item.user.name}
-     
-        />
-      ) )}
-
+        {members?.map((item) => (
+          <UserItem
+            key={item._id}
+            id={item._id}
+            label={item.user.name}
+          />
+        ))}
       </WorkspaceSection>
-         
-      
-    
-  </div>;
+    </div>
+  );
 };

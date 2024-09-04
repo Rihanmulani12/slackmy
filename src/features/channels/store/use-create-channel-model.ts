@@ -1,8 +1,8 @@
-import {atom , useAtom} from "jotai"
+import { atom, useAtom } from "jotai";
 
-const modelState = atom(false)
+const modelState = atom(false);
 
+export const useCreateChannelModel = () => {
+    return useAtom(modelState);
+};
 
-export const usecreateChannelModel = () =>{
-    return useAtom(modelState)
-}
